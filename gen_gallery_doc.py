@@ -25,10 +25,52 @@ def parse_js_object(text, key):
     if not match:
         raise ValueError(f'Could not find window.{key} object in JS file')
     body = match.group(1)
-    body = re.sub(r"([\w$]+)\s*:", r'"\1":', body)
-    body = body.replace("'", '"')
-    body = re.sub(r',\s*([\}\]])', r'\1', body)
-    return body
+
+    result = []
+    in_string = None
+    escape = False
+    i = 0
+    while i < len(body):
+        c = body[i]
+        if in_string:
+            result.append(c)
+            if escape:
+                escape = False
+            elif c == '\\':
+                escape = True
+            elif c == in_string:
+                in_string = None
+            i += 1
+            continue
+
+        if c == '"' or c == "'":
+            in_string = c
+            result.append(c)
+            i += 1
+            continue
+
+        if (c.isalpha() or c.isdigit() or c == '_' or c == '$') and (not result or result[-1] in '{[\n\r\t ,'):
+            j = i
+            while j < len(body) and (body[j].isalnum() or body[j] == '_' or body[j] == '$'):
+                j += 1
+            k = j
+            while k < len(body) and body[k].isspace():
+                k += 1
+            if k < len(body) and body[k] == ':':
+                key = body[i:j]
+                result.append('"')
+                result.append(key)
+                result.append('"')
+                i = j
+                continue
+
+        result.append(c)
+        i += 1
+
+    cleaned = ''.join(result)
+    cleaned = re.sub(r",\s*([\}\]])", r"\1", cleaned)
+    cleaned = re.sub(r",\s*$", "", cleaned)
+    return cleaned
 
 
 def load_gallery_data():

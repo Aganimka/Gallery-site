@@ -1,0 +1,40 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip && pip install "qrcode[pil]"
+      - name: Regenerate QR data and assets
+        run: |
+          python site/gen_qr_data.py
+          python site/gen_qr.py
+      - name: Copy site to docs
+        run: |
+          rm -rf docs || true
+          cp -r site docs
+      - name: Commit generated docs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs site/qr_data.js site/qrcodes
+          git diff --cached --quiet || git commit -m "Update generated docs and QR assets"
+      - name: Deploy to GitHub Pages
+        uses: actions/configure-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: docs
+      - name: Publish
+        uses: actions/deploy-pages@v1
