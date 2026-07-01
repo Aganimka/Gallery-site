@@ -121,12 +121,11 @@
   const CAM_Z = 17;            // камера дальше радиуса кольца -> активная картина перед нами
   camera.position.set(0, 0.4, CAM_Z);
 
-  const isMobile = /Mobi|Android|iPhone|iPad|iPod/.test(navigator.userAgent) || innerWidth <= 840;
-  const renderer = new THREE.WebGLRenderer({ antialias: !isMobile, alpha: false });
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
   renderer.setSize(innerWidth, innerHeight);
-  renderer.setPixelRatio(Math.min(devicePixelRatio, isMobile ? 1.25 : 2));
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.outputEncoding = THREE.sRGBEncoding;
-  renderer.shadowMap.enabled = !isMobile;
+  renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   document.body.appendChild(renderer.domElement);
 
@@ -144,14 +143,14 @@
   // фоновая "пыль"/частицы
   (function dust() {
     const geo = new THREE.BufferGeometry();
-    const cnt = isMobile ? 260 : 700, pos = new Float32Array(cnt * 3);
+    const cnt = 700, pos = new Float32Array(cnt * 3);
     for (let i = 0; i < cnt; i++) {
       pos[i*3] = (Math.random()-0.5)*40;
       pos[i*3+1] = (Math.random()-0.5)*24;
       pos[i*3+2] = (Math.random()-0.5)*30 - 6;
     }
     geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
-    const mat = new THREE.PointsMaterial({ color: 0xc9a86e, size: isMobile ? 0.055 : 0.035, transparent: true, opacity: isMobile ? 0.35 : 0.5 });
+    const mat = new THREE.PointsMaterial({ color: 0xc9a86e, size: 0.035, transparent: true, opacity: 0.5 });
     const pts = new THREE.Points(geo, mat);
     scene.add(pts);
     scene._dust = pts;

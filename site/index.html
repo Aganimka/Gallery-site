@@ -194,7 +194,6 @@
     font-size:11px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;
     transition:.3s ease;font-weight:500;box-shadow:0 8px 26px rgba(0,0,0,.16);
   }
-  .toptools{position:fixed;top:78px;left:50%;transform:translateX(-50%);z-index:45;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;max-width:calc(100vw - 24px);padding:0 8px;}
   .toolbtn .icon{font-size:13px;opacity:.95}
   .toolbtn .label{display:inline-block}
   .toolbtn::before{content:"";position:absolute;inset:-1px;border-radius:inherit;border:1px solid rgba(232,201,138,.16);opacity:.3;transition:.3s}
@@ -234,16 +233,11 @@
   .map-label span{font-size:12px;color:var(--muted);line-height:1.25}
 
   @media(max-width:640px){
-    .toptools{top:12px;gap:8px;padding:0 10px;}
-    .toolbtn{padding:10px 12px;font-size:12px;border-radius:12px;min-width:44px;}
-    .toolbtn .label{display:none}
-    .toolbtn .icon{font-size:16px}
     .nav-hint{display:none}
     .arrow{width:46px;height:46px}
     #hud{bottom:18px}
     .sheet-body{padding:22px 22px 50px}
     .qr-card{flex-direction:column;text-align:center}
-    .qr-card img{max-width:180px;width:100%;margin-bottom:12px}
   }
 </style>
 </head>

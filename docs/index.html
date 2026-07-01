@@ -205,7 +205,10 @@
   }
   .toolbtn:hover::before{opacity:1}
   .toolbtn:active{transform:translateY(0)}
-  .toptools{position:fixed;top:78px;left:50%;transform:translateX(-50%);z-index:45;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;max-width:calc(100vw - 24px);padding:0 8px;}
+  .toptools{
+    position:fixed;top:78px;left:50%;transform:translateX(-50%);z-index:45;
+    display:flex;gap:12px;flex-wrap:wrap;justify-content:center;
+  }
   #gridClose{top:26px;right:30px}
   .toolbtn.active{
     border-color:var(--gold);color:#1a1015;background:linear-gradient(135deg,var(--gold-bright),var(--gold));
@@ -235,10 +238,6 @@
     #hud{bottom:18px}
     .sheet-body{padding:22px 22px 50px}
     .qr-card{flex-direction:column;text-align:center}
-    .toptools{top:12px;gap:8px;padding:0 10px;}
-    .toolbtn{padding:10px 12px;font-size:12px;border-radius:12px;min-width:44px;}
-    .toolbtn .label{display:none}
-    .toolbtn .icon{font-size:16px}
   }
 </style>
 </head>

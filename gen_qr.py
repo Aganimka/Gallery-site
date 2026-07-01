@@ -8,7 +8,7 @@ from qrcode.image.styles.colormasks import SolidFillColorMask
 from PIL import Image, ImageDraw, ImageFont
 import os
 
-BASE = "https://aganimka.github.io/Gallery-site"
+BASE = "https://primgallery.com"
 OUT = "site/qrcodes"
 os.makedirs(OUT, exist_ok=True)
 
