@@ -238,6 +238,10 @@
     #hud{bottom:18px}
     .sheet-body{padding:22px 22px 50px}
     .qr-card{flex-direction:column;text-align:center}
+    .toptools{top:66px;gap:9px}
+    .toolbtn{padding:10px 16px;font-size:10px;gap:6px}
+    .toolbtn .label{display:none}
+    .toolbtn .icon{font-size:14px}
   }
 </style>
 </head>
@@ -265,7 +269,7 @@
   <div class="toptools">
   <button class="toolbtn" id="gridBtn"><span class="icon">▦</span><span class="label">Все 29 работ</span></button>
   <button class="toolbtn" id="autoBtn"><span class="icon" id="autoIcon">▶</span><span class="label">Авто-показ</span></button>
-  <button class="toolbtn" id="audioBtn"><span class="icon">🔈</span><span class="label">Звук зала</span></button>
+  <button class="toolbtn" id="weakBtn"><span class="icon">🐢</span><span class="label">Слабое устройство</span></button>
   <button class="toolbtn" id="mapBtn"><span class="icon">🗺</span><span class="label">Мини-карта</span></button>
 </div>
 
@@ -287,8 +291,7 @@
   <div id="mapList" style="max-height:70vh;overflow:auto;margin-top:8px;padding-right:8px;color:var(--muted);"></div>
 </div>
 
-<!-- Background audio (поместите файл site/audio/hall.mp3) -->
-<audio id="bgAudio" loop preload="none"></audio>
+<!-- Режим слабого устройства: низкое разрешение и тени для слабых гаджетов -->
 
 <!-- Detail panel -->
 <div id="panel">

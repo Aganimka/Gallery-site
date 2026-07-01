@@ -121,9 +121,12 @@
   const CAM_Z = 17;            // камера дальше радиуса кольца -> активная картина перед нами
   camera.position.set(0, 0.4, CAM_Z);
 
+  let weakDeviceMode = false;
+  function getDevicePixelRatio() { return weakDeviceMode ? 1 : Math.min(devicePixelRatio, 2); }
+
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
   renderer.setSize(innerWidth, innerHeight);
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setPixelRatio(getDevicePixelRatio());
   renderer.outputEncoding = THREE.sRGBEncoding;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -469,6 +472,7 @@
   addEventListener("resize", () => {
     camera.aspect = innerWidth / innerHeight;
     camera.updateProjectionMatrix();
+    renderer.setPixelRatio(getDevicePixelRatio());
     renderer.setSize(innerWidth, innerHeight);
   });
 
@@ -545,45 +549,24 @@
   updateHUD();
   animate();
 
-  /* ---------- Audio + Mini-map UI ---------- */
+  /* ---------- Weak-device + Mini-map UI ---------- */
   (function uiExtras() {
-    const audio = el('bgAudio');
-    const audioBtn = el('audioBtn');
-    // путь по умолчанию — user положит файл в site/audio/hall.mp3
-    audio.src = 'audio/hall.mp3';
-    let audioLoaded = false;
-    let audioPlaying = false;
-    
-    audio.addEventListener('canplay', () => { audioLoaded = true; });
-    audio.addEventListener('play', () => { audioPlaying = true; });
-    audio.addEventListener('pause', () => { audioPlaying = false; });
-    audio.addEventListener('error', () => { 
-      audioBtn.textContent = '🔇 Звук не найден'; 
-      audioBtn.style.opacity = '0.6';
-    });
-    
-    audioBtn.onclick = () => {
-      if (!audioLoaded && !audioPlaying) {
-        // попытка загрузить/воспроизвести — может требовать interaction
-        audio.play()
-          .then(() => { 
-            audioPlaying = true;
-            audioBtn.textContent = '🔊 Звук вкл'; 
-          })
-          .catch((err) => { 
-            console.warn('Звук не воспроизводится:', err);
-            audioBtn.textContent = '🔇 Звук заблокирован'; 
-          });
-      } else if (audioPlaying) { 
-        audio.pause(); 
-        audioPlaying = false;
-        audioBtn.textContent = '🔈 Звук выкл'; 
-      } else { 
-        audio.play();
-        audioPlaying = true;
-        audioBtn.textContent = '🔊 Звук вкл'; 
-      }
+    const weakBtn = el('weakBtn');
+    function applyWeakDeviceMode() {
+      weakBtn.classList.toggle('active', weakDeviceMode);
+      weakBtn.querySelector('.icon').textContent = '🐢';
+      weakBtn.querySelector('.label').textContent = weakDeviceMode ? 'Слабое устройство: вкл' : 'Слабое устройство';
+      renderer.shadowMap.enabled = !weakDeviceMode;
+      key.castShadow = !weakDeviceMode;
+      renderer.setPixelRatio(getDevicePixelRatio());
+      renderer.setSize(innerWidth, innerHeight, false);
+      if (scene._dust) scene._dust.visible = !weakDeviceMode;
+    }
+    weakBtn.onclick = () => {
+      weakDeviceMode = !weakDeviceMode;
+      applyWeakDeviceMode();
     };
+    applyWeakDeviceMode();
 
     // мини-карта
     const map = el('map'); const mapBtn = el('mapBtn'); const mapClose = el('mapClose'); const mapList = el('mapList');
