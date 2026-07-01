@@ -4,7 +4,7 @@ import qrcode
 from qrcode.constants import ERROR_CORRECT_M
 import io, base64
 
-BASE = "https://primgallery.com"
+BASE = "https://aganimka.github.io/Gallery-site"
 parts = ["window.QR_DATA = {"]
 for pid in range(1, 30):
     url = f"{BASE}/#p={pid}"

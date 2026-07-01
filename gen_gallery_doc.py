@@ -129,17 +129,15 @@ def build_document(base, paintings, qr_data):
     doc.add_paragraph('Таблица содержит автора, название, ссылку на страницу и QR-код для каждой картины.', style='Intense Quote')
     doc.add_paragraph()
 
-    table = doc.add_table(rows=1, cols=4)
+    table = doc.add_table(rows=1, cols=3)
     table.style = 'Table Grid'
     hdr_cells = table.rows[0].cells
-    hdr_cells[0].text = '№'
-    hdr_cells[1].text = 'Автор / Название'
-    hdr_cells[2].text = 'Ссылка'
-    hdr_cells[3].text = 'QR-код'
+    hdr_cells[0].text = 'Автор / Название'
+    hdr_cells[1].text = 'Ссылка'
+    hdr_cells[2].text = 'QR-код'
 
     for painting in paintings:
         row_cells = table.add_row().cells
-        row_cells[0].text = str(painting.get('id', ''))
 
         author = painting.get('artist', '')
         life = painting.get('life', '')
@@ -148,8 +146,8 @@ def build_document(base, paintings, qr_data):
         if life:
             author_line = f'{author} ({life})'
 
-        row_cells[1].text = f'{author_line}\n{title}'
-        paragraph = row_cells[2].paragraphs[0]
+        row_cells[0].text = f'{author_line}\n{title}'
+        paragraph = row_cells[1].paragraphs[0]
         link = base + '/#p=' + str(painting.get('id', ''))
         add_hyperlink(paragraph, link, link)
 
@@ -157,11 +155,11 @@ def build_document(base, paintings, qr_data):
         if img_data:
             image_bytes = base64.b64decode(img_data.split(',', 1)[1])
             image_stream = io.BytesIO(image_bytes)
-            paragraph = row_cells[3].paragraphs[0]
+            paragraph = row_cells[2].paragraphs[0]
             run = paragraph.add_run()
             run.add_picture(image_stream, width=Inches(1.2))
         else:
-            row_cells[3].text = 'QR отсутствует'
+            row_cells[2].text = 'QR отсутствует'
 
     doc.add_page_break()
     return doc

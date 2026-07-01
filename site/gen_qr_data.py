@@ -15,6 +15,6 @@ for pid in range(1, 30):
     b64 = base64.b64encode(buf.getvalue()).decode()
     parts.append(f'  {pid}: "data:image/png;base64,{b64}",')
 parts.append("};")
-with open("site/qr_data.js", "w") as f:
+with open("qr_data.js", "w") as f:
     f.write("\n".join(parts))
-print("site/qr_data.js written")
+print("qr_data.js written")
